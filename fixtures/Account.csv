@@ -1,0 +1,4 @@
+Id,Name,BillingCountry,Industry,CurrencyIsoCode,AnnualRevenue,OwnerId,Planning_Note__c
+001DEMOIMPORT001,"Sample Components, Ltd",New Zealand,Manufacturing,NZD,2500000,005DEMOOWNER001,"Fictional fixture, not a customer export"
+001DEMOIMPORT002,Sample Wholesale,Australia,Wholesale,AUD,3400000,005DEMOOWNER002,"Line one
+Line two"

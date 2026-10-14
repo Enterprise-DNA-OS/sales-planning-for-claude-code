@@ -1,24 +1,9 @@
-# Why there is no front end
+# Planning work without a front end
 
-Salesforce Sales Planning is a database with a subscription. The tables underneath it are ordinary: a few entities, a few relationships, a handful of workflows you repeat every week. What you pay for is the layer on top that lets people who do not write SQL get at those tables. Screens, filters, dashboards, forms.
+A sales plan is account coverage, workload assumptions, quotas and a recorded decision. The commands read those records and produce documents an owner can inspect. Draft scenarios stay separate and approved snapshots preserve the decision.
 
-That layer used to be the whole product, because talking to a database was hard. It is not hard any more. Open this folder in Claude Code, describe what you want, and it writes the query, runs it, and explains the answer. Ask a question the dashboard never had a chart for and you still get an answer.
+A screen adds map drawing, drag and drop, shared editing, mobile access and guided data entry. This base has none of those. It also does not collect live CRM changes, calculate travel times or run offline rep visits. Use a dedicated mapping or routing system when geography and road travel determine daily work. The base remains useful for periodic account and quota planning without those features.
 
-## What you gain
+Read-only HTML reports are generated files, not a web application. They do not change data. Enterprise DNA can scope a screen and connections for the owner's version. There is no claim of feature parity with Salesforce Sales Planning.
 
-- **Better answers.** A dashboard shows what the vendor decided to chart. Here you ask your own question, in your own words, and get it answered against your own data.
-- **No seats.** Everyone who needs to look can look. The bill does not grow with headcount.
-- **Your data in your Postgres.** Plain tables. Back them up, query them from anything, leave any time. There is no export step because there is nothing to leave.
-- **A process that matches you.** When your way of working changes, you add a command. You do not wait for a feature request to clear.
-
-## What you give up
-
-- **A visual board.** Stages are a table you ask about, not cards you drag.
-- **A phone app.** It runs where Claude Code runs.
-- **A vendor help desk.** This is open source. Enterprise DNA supports the installed version for businesses that want someone to call.
-
-## Who this fits
-
-Small teams who already use Claude Code, or who would rather learn to ask than learn another interface. If your team needs a screen to look at all day, keep Salesforce Sales Planning. If you need the answers more than the screens, this is cheaper, faster and yours.
-
-Installed and run for you: https://enterprisedna.co/omni/instead-of/salesforce-sales-planning
+Use /new-view for a read-only report and /customise for a tested change to the business rules. Every change keeps one database and the same command recipes for all coding agents.

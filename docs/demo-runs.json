@@ -1,0 +1,24 @@
+{
+  "captured": "2026-10-14T22:44:41.893Z",
+  "dataset": "Fictional seeded demo",
+  "screens": [
+    {
+      "title": "Account coverage",
+      "ask": "Which accounts still need someone to cover them?",
+      "command": "npm run planning -- coverage --plan=\"FY27 baseline\"",
+      "output": "  external_id  account               territory  rep          workload\n  -----------  --------------------  ---------  -----------  --------\n  DEMO004      Coastal Distribution                          1       \n  DEMO001      Harbour Components    NORTH      Aroha North  3       \n  DEMO002      Northern Supply       NORTH      Aroha North  3       \n  DEMO003      Southern Precision    SOUTH      Ben South    2"
+    },
+    {
+      "title": "Workload review",
+      "ask": "Who has more account work than their capacity allows?",
+      "command": "npm run planning -- capacity --plan=\"FY27 baseline\"",
+      "output": "  code   rep          capacity  accounts  workload  overload\n  -----  -----------  --------  --------  --------  --------\n  NORTH  Aroha North  4         2         6         2       \n  SOUTH  Ben South    6         1         2         -4"
+    },
+    {
+      "title": "Planning decisions",
+      "ask": "What needs attention before this plan can be approved?",
+      "command": "npm run planning -- attention --plan=\"FY27 baseline\"",
+      "output": "  kind       item                                            detail                         \n  ---------  ----------------------------------------------  -------------------------------\n  uncovered  Coastal Distribution                            Assign a territory             \n  capacity   Aroha North                                     2 workload units over capacity \n  quota      FY27 baseline                                   100000.00 NZD quota unallocated\n  followup   Agree Coastal coverage and close the quota gap  2026-10-11"
+    }
+  ]
+}

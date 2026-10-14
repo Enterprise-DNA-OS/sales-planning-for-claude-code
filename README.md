@@ -1,115 +1,112 @@
-<h1 align="center">Sales Planning for Claude Code</h1>
+# Sales Planning for Claude Code
 
-<p align="center">
-  <strong>The open-source sales planning system that is just a database and Claude Code.</strong>
-</p>
+Know who covers each account, which rep is overloaded and whether the quotas add up.
 
-<p align="center">
-  Created by <a href="https://www.enterprisedna.co"><strong>Enterprise DNA</strong></a>. Free and open source. Works with Claude Code, Codex, OpenCode or Cursor.
-</p>
+| Do it yourself | We customise it | We run it for you |
+|---|---|---|
+| Free MIT software. Install and run the fictional demo. | Your segments, workload rules, plan documents and imported history. | Installed and operated through Omni by Enterprise DNA. One setup fee, then a retainer. |
 
-<!-- three-doors -->
-<table align="center">
-  <tr>
-    <td align="center"><strong>Do it yourself</strong><br/>Clone it, run it, own it. Free, MIT.<br/><a href="#quick-start">Quick start</a></td>
-    <td align="center"><strong>We customise it</strong><br/>Your fields, your rules, your Salesforce Sales Planning data brought across.<br/><a href="https://enterprisedna.co/omni/book/?utm_source=github&utm_medium=readme&utm_campaign=salesforce-sales-planning">Book a call</a></td>
-    <td align="center"><strong>We run it for you</strong><br/>Installed, connected and operated inside Omni. Setup fee, then a retainer.<br/><a href="https://enterprisedna.co/omni/instead-of/salesforce-sales-planning?utm_source=github&utm_medium=readme&utm_campaign=salesforce-sales-planning">How it works</a></td>
-  </tr>
-</table>
+[Get your version built](https://enterprisedna.co/omni/book?offer=replace-software&utm_medium=readme&utm_campaign=salesforce-sales-planning) · [Instead of Salesforce Sales Planning](https://enterprisedna.co/omni/instead-of/salesforce-sales-planning)
 
-<p align="center">
-  <a href="#what-is-this">What is this</a> &bull;
-  <a href="#why-no-front-end">Why no front end</a> &bull;
-  <a href="#quick-start">Quick start</a> &bull;
-  <a href="#the-commands">Commands</a> &bull;
-  <a href="#instead-of-salesforce-sales-planning">Instead of Salesforce Sales Planning</a> &bull;
-  <a href="#want-it-installed-and-run-for-you">Installed for you</a> &bull;
-  <a href="#license">License</a>
-</p>
+## Start here
 
-<p align="center">
-  <img src="https://img.shields.io/badge/Node-20+-339933?style=flat-square" alt="Node 20+" />
-  <img src="https://img.shields.io/badge/PostgreSQL-any-336791?style=flat-square" alt="PostgreSQL" />
-  <img src="https://img.shields.io/badge/PGlite-embedded-3ecf8e?style=flat-square" alt="PGlite" />
-  <img src="https://img.shields.io/badge/License-MIT-yellow?style=flat-square" alt="MIT License" />
-</p>
-
----
-
-## What is this
-
-Sales Planning for Claude Code does the job you pay Salesforce Sales Planning for, as a Postgres database and a set of agent commands. There is no web front end. You open the folder in [Claude Code](https://claude.com/claude-code) (or Codex, OpenCode, Cursor: see `AGENTS.md`) and ask for what you want in plain language. It runs the right query, and it can answer questions the Salesforce Sales Planning dashboard cannot.
-
-<!-- TODO(author): the annual bill. One sentence: what a 10 to 50 person business typically pays Salesforce Sales Planning per year, all in, with a source. -->
-
-Want the same thing with a web front end, or built on a different stack? That is a customisation, and it is exactly what Enterprise DNA does: [book a call](https://enterprisedna.co/omni/book/?utm_source=github&utm_medium=readme&utm_campaign=salesforce-sales-planning).
-
-<!-- TODO(author): two or three sentences on what this specific product covers and who it is for. -->
-
-## Why no front end
-
-- The front end was only ever there because the database was hard to talk to. That is no longer true.
-- Your data sits in plain Postgres tables you own. Any tool can read them. No export, no lock-in.
-- No seats, no tiers, no add-ons. Read [docs/why-no-front-end.md](docs/why-no-front-end.md) for the honest trade-offs too.
-
-## Quick start
-
-Sixty seconds, no database install (an embedded Postgres runs inside Node):
+Node 20 or later. No database server needed for the local demo.
 
 ```bash
-git clone https://github.com/Enterprise-DNA-OS/sales-planning-for-claude-code.git
-cd sales-planning-for-claude-code
 npm install
 npm run demo
+npm run planning -- weekly-review --plan="FY27 baseline"
+npm run view
+npm run docs
 ```
 
-Then open the folder in Claude Code and type a slash command. <!-- TODO(author): name the first command to try. -->
+Open this folder in Claude Code, Codex, OpenCode or Cursor. Every agent uses CLAUDE.md and the same recipes in .claude/commands. PGlite stores local data in .data/db. Set DATABASE_URL for PostgreSQL. Shared installations need restricted credentials, backups and an operator access policy. The seed command refuses a remote database.
 
-### Use it with your own Postgres or Supabase
+The fictional Harbour sales team has an uncovered account, an overloaded rep, a quota gap and overdue record reviews. Demo dates are relative to the first seed. Repeating the seed preserves existing records. Use a separate empty database for real work.
 
-Copy `.env.example` to `.env`, set `DATABASE_URL`, then `npm run migrate`. Same commands, shared data, no per-seat fee.
+## The weekly work
 
-## The commands
+/coverage checks every account in the plan currency. /capacity combines all territories held by the same rep. /quotas checks the total against the plan target. /attention finds gaps and overdue follow-ups. /compliance lists records needing accuracy or retention review. /weekly-review combines these into the Monday conversation.
 
-<!-- TODO(author): a table of the slash commands in .claude/commands and what each one does. -->
+33 CLI commands and 37 slash-command recipes. Every CLI command accepts --json. Names are case-insensitive and UUID prefixes work. Ambiguous references list candidates and exit 1. Every data change requires --actor, writes an event and supports --dry-run.
 
-| Command | What it does |
-|---|---|
-| `/...` | ... |
-
-## Instead of salesforce-sales-planning
-
-<!-- TODO(author): how to bring data across from Salesforce Sales Planning; link docs/replace-salesforce-sales-planning.md -->
-
-## Architecture
-
-```
-sales-planning-for-claude-code/
-  CLAUDE.md                 how the operator wants this run (routing table + house rules)
-  AGENTS.md                 the same, for Codex / OpenCode / Cursor / Gemini CLI
-  .claude/commands/         the slash commands
-  scripts/                  the CLI the commands drive
-  scripts/lib/db.mjs        one adapter: DATABASE_URL (pg) or embedded PGlite
-  supabase/migrations/      plain SQL schema
-  supabase/seed.sql         demo data
-  docs/                     the thesis and the migration guide
+```bash
+npm run planning -- clone-plan --plan="FY27 baseline" --name="Rebalanced" --actor="Planner"
+npm run planning -- assign --plan="Rebalanced" --account=DEMO002 --territory=SOUTH --rationale="Shift service workload" --actor="Planner" --dry-run
+npm run planning -- compare --plan="FY27 baseline" --other="Rebalanced"
+npm run planning -- help
 ```
 
-## Built for coding agents
+Remove --dry-run after checking the proposed change. Use set-capacity and set-workload to record reviewed effort assumptions, set-target to change a draft target, and quota to allocate it. Workload is a positive integer chosen by the business, not a travel-time estimate. AnnualRevenue is the customer's turnover, not your sales to that customer, and is never used to calculate quotas.
 
-The database, CLI and command recipes work with Claude Code, Codex, OpenCode or Cursor. Ask your coding agent for a new command and have it implement and test the change against the same records.
+## Plans and approval
 
-## Contributing
+Each plan covers all current accounts in its currency. Create separate plans for separate currencies. There is no currency conversion. Quotas are stored in integer cents. Each account has one territory in each plan. Territory codes are unique within a plan. One rep can own several territories and capacity is counted once per rep.
 
-Issues and pull requests are welcome. Keep the shape: plain SQL, a small CLI, a slash command per recurring job, no front end.
+Approval requires accounts and territories, complete coverage, no overloaded reps, an exact quota total, no overdue follow-ups and current review evidence for every included account and rep. A different actor approves with evidence. Approved plans hold a frozen snapshot of allocations, quotas and workload. Later imports and capacity edits cannot rewrite that snapshot. Clone an approved plan to change it. The clone uses current account and rep records, so review changes before approval.
 
-## Want it installed and run for you?
+The account and rep review dates are your policy, not a statutory interval. An empty compliance report is not legal certification. [Exact checks and official sources](docs/compliance.md).
 
-Enterprise DNA installs Sales Planning for Claude Code for your business, migrates your Salesforce Sales Planning data, connects it to the rest of your tools, and runs it for you as part of **Omni**, our managed Command Center. One setup fee, then a monthly retainer.
+Actor labels record attribution, not authenticated identity. The database owner can alter records and disable triggers. RLS has no public policies. This CLI is for trusted operators with database credentials, not an anonymous web service. Restrict access to source exports and reports, which may hold personal information.
 
-- Book a call: [enterprisedna.co/omni/book](https://enterprisedna.co/omni/book/?offer=replace-software&utm_source=github&utm_medium=readme&utm_campaign=salesforce-sales-planning)
-- Read more: [enterprisedna.co/omni/instead-of/salesforce-sales-planning](https://enterprisedna.co/omni/instead-of/salesforce-sales-planning?utm_source=github&utm_medium=readme&utm_campaign=salesforce-sales-planning)
+## Ten questions answered today
 
-## License
+These are supported by this build. They are not claims that Salesforce cannot answer them.
 
-MIT. Copyright (c) 2026 Enterprise DNA.
+1. Which accounts have no territory in this plan? Use coverage.
+2. Who is overloaded across more than one territory? Use capacity.
+3. How much of the target has no quota allocation? Use quotas.
+4. Which account moves between these two scenarios? Use compare.
+5. Which account review dates are overdue? Use compliance.
+6. Which rep records lack a retention purpose? Use compliance.
+7. What planning follow-ups are late? Use attention.
+8. What exactly did the second reviewer approve? Use show-plan.
+9. Who changed an allocation and why? Use activity.
+10. What needs a decision in Monday's planning meeting? Use weekly-review.
+
+## Bring your Salesforce accounts
+
+Export Account records through Salesforce Data Export and extract Account.csv. Then:
+
+```bash
+npm run planning -- import salesforce-sales-planning --file=imports/Account.csv --currency=NZD --actor="Planner" --dry-run
+```
+
+Use the source organisation's default currency when CurrencyIsoCode is absent. Each row with CurrencyIsoCode keeps its own currency. The import preserves all source columns, including custom fields, and matches Id on repeat imports. New accounts start at one workload unit and require review. Changed source values clear their accuracy review. Local workload and retention purpose remain intact.
+
+This imports account facts, not Sales Planning scenarios, hierarchy rules, quotas, permissions, calculated fields or attachments. OwnerId is retained as evidence and is not guessed into a rep assignment. [Export steps, exact mapping and cutover checks](docs/replace-salesforce-sales-planning.md). A one-command account import is ready today. A full switch depends on mapping and checking your planning rules.
+
+Export all records, source columns, events and approved snapshots:
+
+```bash
+npm run planning -- export --out=exports/planning.json
+```
+
+The destination must be new. Store exports securely. The JSON export is a complete readable backup, not an automatic restore command. Back up the underlying database for recovery and test restores separately.
+
+## Documents and views
+
+Edit brand.json once for your business name, logo and colours. npm run docs creates draft territory and quota plans plus approved allocation records. npm run view creates the week, quota gaps and control exceptions as read-only HTML. /draft-plan and /draft-review write reviewed paperwork to drafts/. Nothing sends. Open reports locally or print to PDF.
+
+Approved reports use the snapshot. Current operational views show draft plans only. /new-view adds a read-only report and /customise changes fields or rules through tested migrations. [What a screen adds](docs/why-no-front-end.md).
+
+## Your first hour: ten things to ask for
+
+1. Put our name and logo on the quota plan.
+2. Preview our Salesforce account export.
+3. Set our account workload scale.
+4. Add our reps and their capacity.
+5. Create our next annual plan.
+6. Show every uncovered account.
+7. Compare a changed allocation with the baseline.
+8. Record why an account moves.
+9. Add our accuracy and retention review policy.
+10. Draft the plan for a second reviewer.
+
+## Verification and scope
+
+npm test uses isolated data and exercises all 33 commands, quota totals, combined rep workload, cross-currency rejection, approval immutability, ambiguous references, invalid inputs, import rollback and idempotency, retained source columns, full exports and escaped branded HTML. GitHub CI runs Node 20/22 on Windows and Linux, plus PostgreSQL 17. TEST_DATABASE_URL must point at an empty disposable database.
+
+The free base is a planning back office. It has no map, travel routing, forecasting engine, live CRM sync, commission calculator, email sender or rep portal. Enterprise DNA scopes required connections and screens for your version. [Selection research and price source](docs/research.md).
+
+MIT. Not affiliated with Salesforce or Anthropic. Hosting and coding-agent usage have separate costs. Enterprise DNA installs, adapts and operates your version through Omni by Enterprise DNA for one setup fee, then a retainer. [Book 30 minutes with Sam](https://enterprisedna.co/omni/book?offer=replace-software&utm_medium=readme&utm_campaign=salesforce-sales-planning).

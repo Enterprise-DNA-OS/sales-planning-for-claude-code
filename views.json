@@ -1,13 +1,41 @@
 [
   {
     "name": "week",
-    "title": "This week",
-    "subtitle": "Sales Planning for Claude Code: what needs attention, rendered by npm run view",
+    "title": "Sales planning week",
+    "subtitle": "Draft plans use current records. Approved decisions live in their frozen plan document.",
     "sections": [
       {
-        "title": "Needs attention",
-        "note": "TODO(author): point this at the industry's attention view (overdue, stuck, quiet).",
-        "sql": "select 'replace me' as item, 'TODO(author)' as why"
+        "title": "Uncovered accounts",
+        "sql": "select plan,account,segment,workload from v_coverage where status='draft' and territory is null order by plan,account"
+      },
+      {
+        "title": "Overloaded reps",
+        "sql": "select c.plan,c.rep,c.capacity,c.workload,c.overload from v_capacity c join plans p on p.id=c.plan_id where p.status='draft' and overload>0 order by c.plan,c.rep"
+      },
+      {
+        "title": "Overdue follow-ups",
+        "sql": "select p.name plan,f.note,f.owner,f.due from followups f join plans p on p.id=f.plan_id where f.resolved_at is null and f.due<current_date order by f.due"
+      }
+    ]
+  },
+  {
+    "name": "quotas",
+    "title": "Draft quota allocation",
+    "sections": [
+      {
+        "title": "Quota gaps",
+        "sql": "select q.plan,q.currency,q.target_cents,q.allocated_cents,q.gap_cents from v_quotas q join plans p on p.id=q.plan_id where p.status='draft' order by q.plan"
+      }
+    ]
+  },
+  {
+    "name": "controls",
+    "title": "Record review exceptions",
+    "sections": [
+      {
+        "title": "Reviews needed",
+        "note": "Policy reminders support accuracy and retention reviews. They do not certify compliance.",
+        "sql": "select kind,name,issue from v_compliance order by kind,name,issue"
       }
     ]
   }

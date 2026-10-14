@@ -1,11 +1,42 @@
 [
   {
-    "name": "example",
-    "title": "TODO(author): the first document this industry must produce",
-    "for_each": "select gen_random_uuid() as id, 'Example' as name",
+    "name": "territory-plan",
+    "title": "Territory and quota plan",
+    "for_each": "select id,name from plans where status='draft' order by name",
     "file": "name",
     "sections": [
-      { "title": "Details", "sql": "select 'replace me' as item, $1::text as record_id" }
+      {
+        "title": "Draft plan",
+        "sql": "select name,starts,ends,currency,target_cents,creator,status from plans where id=$1"
+      },
+      {
+        "title": "Territories",
+        "sql": "select t.code,t.name,r.name rep,p.currency,t.quota_cents from territories t join reps r on r.id=t.rep_id join plans p on p.id=t.plan_id where t.plan_id=$1 order by t.code"
+      },
+      {
+        "title": "Account allocations",
+        "sql": "select account,territory,rep,workload,rationale from v_coverage where plan_id=$1 order by account"
+      }
+    ]
+  },
+  {
+    "name": "approval-record",
+    "title": "Approved sales plan",
+    "for_each": "select id,name from plans where status='approved' order by name",
+    "file": "name",
+    "sections": [
+      {
+        "title": "Approval",
+        "sql": "select name,approved_by,approved_at,evidence,currency,target_cents from plans where id=$1"
+      },
+      {
+        "title": "Frozen account allocations",
+        "sql": "select x->>'account' account,x->>'territory' territory,x->>'rep' rep,x->>'workload' workload from plans p, jsonb_array_elements(p.snapshot->'coverage') x where p.id=$1 order by x->>'account'"
+      },
+      {
+        "title": "Frozen territory quotas",
+        "sql": "select x->>'code' territory,x->>'rep' rep,p.currency,(x->>'quota_cents')::bigint quota_cents from plans p, jsonb_array_elements(p.snapshot->'territories') x where p.id=$1 order by x->>'code'"
+      }
     ]
   }
 ]
