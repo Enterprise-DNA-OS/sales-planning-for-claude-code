@@ -6,7 +6,7 @@ Know who covers each account, which rep is overloaded and whether the quotas add
 |---|---|---|
 | Free MIT software. Install and run the fictional demo. | Your segments, workload rules, plan documents and imported history. | Installed and operated through Omni by Enterprise DNA. One setup fee, then a retainer. |
 
-[Get your version built](https://enterprisedna.co/omni/book?offer=replace-software&utm_medium=readme&utm_campaign=salesforce-sales-planning) · [Instead of Salesforce Sales Planning](https://enterprisedna.co/omni/instead-of/salesforce-sales-planning)
+[Get your version built](https://enterprisedna.co/omni/book?offer=replace-software&utm_medium=readme&utm_campaign=salesforce-sales-planning) · [Instead of Salesforce Sales Planning](https://enterprisedna.co/omni/instead-of/salesforce-sales-planning?utm_source=github&utm_medium=readme&utm_campaign=salesforce-sales-planning)
 
 ## Start here
 
